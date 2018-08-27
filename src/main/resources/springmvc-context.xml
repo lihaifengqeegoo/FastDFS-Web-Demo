@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	
+	<context:component-scan base-package="com.autozi.**" />
+	
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+			<beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<beans:property name="supportedMediaTypes">
+					<beans:list>
+						<beans:value>text/plain;charset=utf-8</beans:value>
+						<beans:value>text/html;charset=UTF-8</beans:value>
+					</beans:list>
+				</beans:property>
+			</beans:bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<beans:bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<beans:property name="order" value="1" />
+		<beans:property name="suffix" value=".html" />
+		<beans:property name="contentType" value="text/html;charset=utf-8" />
+	</beans:bean>
+
+	<beans:bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<beans:property name="templateLoaderPath" value="/WEB-INF/view/" />
+		<beans:property name="freemarkerSettings"><!-- 设置FreeMarker环境属性 -->
+			<beans:props>
+				<beans:prop key="template_update_delay">5</beans:prop><!--刷新模板的周期，单位为秒 -->
+				<beans:prop key="default_encoding">UTF-8</beans:prop><!--模板的编码格式 -->
+				<beans:prop key="locale">zh_CN</beans:prop><!-- 本地化设置 -->
+				<beans:prop key="datetime_format">yyyy-MM-dd HH:mm:ss</beans:prop>
+				<beans:prop key="time_format">HH:mm:ss</beans:prop>
+				<beans:prop key="number_format">0.######</beans:prop>
+				<beans:prop key="boolean_format">true,false</beans:prop>
+				<beans:prop key="whitespace_stripping">true</beans:prop>
+				<beans:prop key="tag_syntax">auto_detect</beans:prop>
+				<beans:prop key="url_escaping_charset">UTF-8</beans:prop>
+			</beans:props>
+		</beans:property>
+	</beans:bean>
+	
+	<!-- 文件上传 -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	
+</beans:beans>
